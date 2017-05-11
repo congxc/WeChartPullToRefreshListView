@@ -1,0 +1,15 @@
+<view class="refresh-block" style="height:{{refreshHeight}}rpx"> 
+        <image  class="{{loading?'roate':(pull?'':'pull')}}" src="{{loading?'../../images/icon_loading.png':'../../images/icon_arrow.png'}}"></image>
+        <text  class="refreshing_text" >{{refreshing_text}}</text> 
+</view>  
+<scroll-view class="scroll_container" scroll-y="true" style="top:{{refreshHeight}}rpx;bottom:{{loadMoreHeight}}rpx;"  bindscroll="scroll" bindscrolltolower="lower" bindscrolltoupper="upper" bindtouchstart="start" bindtouchend="end" >  
+    <view class="content" bindtouchmove="move">
+        <block wx:for="{{words}}">  
+                <view class="item-style">{{item}}</view>  
+        </block>  
+    </view>
+</scroll-view> 
+<view class="loadMore-block" style="height:{{loadMoreHeight}}rpx"> 
+        <image  class="{{loading?'roate':(pull?'pull':'')}}" src="{{loading?'../../images/icon_loading.png':'../../images/icon_arrow.png'}}"></image>
+        <text  class="loading-text" >{{loading_text}}</text> 
+</view>  
