@@ -1,0 +1,2 @@
+# WeChartPullToRefreshListView
+微信小程序实现类似android下拉刷新上拉加载更多ListView
