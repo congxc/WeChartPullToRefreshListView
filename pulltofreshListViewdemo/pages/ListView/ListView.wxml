@@ -1,15 +1,10 @@
-<view class="refresh-block" style="height:{{refreshHeight}}rpx"> 
-        <image  class="{{loading?'roate':(pull?'':'pull')}}" src="{{loading?'../../images/icon_loading.png':'../../images/icon_arrow.png'}}"></image>
-        <text  class="refreshing_text" >{{refreshing_text}}</text> 
-</view>  
-<scroll-view class="scroll_container" scroll-y="true" style="top:{{refreshHeight}}rpx;bottom:{{loadMoreHeight}}rpx;"  bindscroll="scroll" bindscrolltolower="lower" bindscrolltoupper="upper" bindtouchstart="start" bindtouchend="end" >  
-    <view class="content" bindtouchmove="move">
+
+<include src="../../utils/refreshHeaderView.wxml"/>
+<include src="../../utils/loadMoreFooterView.wxml"/>
+<scroll-view class="scroll_container" scroll-y="true" style="position:fixed;width:100%;left:0;height:{{windowHeight}}px;top:{{loadMoreHeight == 0? refreshHeight:-loadMoreHeight}}px;bottom:{{loadMoreHeight}}px;"  bindscroll="scroll" bindscrolltolower="lower" bindscrolltoupper="upper" bindtouchstart="start" bindtouchend="end" > 
+    <view style="width:100%;height:100%" bindtouchmove="move">
         <block wx:for="{{words}}">  
                 <view class="item-style">{{item}}</view>  
         </block>  
     </view>
-</scroll-view> 
-<view class="loadMore-block" style="height:{{loadMoreHeight}}rpx"> 
-        <image  class="{{loading?'roate':(pull?'pull':'')}}" src="{{loading?'../../images/icon_loading.png':'../../images/icon_arrow.png'}}"></image>
-        <text  class="loading-text" >{{loading_text}}</text> 
-</view>  
+</scroll-view>
