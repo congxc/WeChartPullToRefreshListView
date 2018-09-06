@@ -16,7 +16,8 @@ function register(context,json){
     isUpper: true,
     isLower: false,
     windowHeight: 603,//获取屏幕高度  
-    downY: 0,//触摸时Y轴坐标  
+    downY: 0,//触摸时Y轴坐标 
+    end:true//touchEnd 
   });
   //获取屏幕高度  
   wx.getSystemInfo({
@@ -50,12 +51,22 @@ function register(context,json){
 
 function scroll (context){
   console.log("scroll...");
+  if(context.data.end && context.data.isLower ){//如果快速拖动 然后释放 会在end后继续scroll 
+  //可能出现scroll到顶点后依然走scroll方法
+    return;
+  }
+  if (context.data.end && context.data.isUpper){
+    return;
+  }
   context.data.scrolling = true;
+  context.data.isUpper = false;
+  context.data.isLower = false;
 
 }
 //上拉  滚动条 滚动到底部时触发
 function lower (context) {
   console.log("lower...")
+  context.data.end = true;
   context.data.isLower = true;
   context.data.scrolling = false;
 
@@ -63,10 +74,12 @@ function lower (context) {
 //下拉  滚动条 滚动顶底部时触发
 function upper (context) {
   console.log("upper....");
+  context.data.end = true;
   context.data.isUpper = true;
   context.data.scrolling = false;
 }
 function start(context,e) {
+  context.data.end = false;
   console.log('start ');
   if (context.data.scrolling || context.data.loading) {
     return;
@@ -83,6 +96,7 @@ function start(context,e) {
   });
 }
 function end(context,e) {
+  context.data.end = true;
   context.data.scrolling = false;
   if (context.data.refreshing) {
     return;
@@ -144,13 +158,17 @@ function loadFinish(context,success) {
   }, 500);
 }
 function move(context,e) {
-
-  if (context.data.scrolling || context.data.loading) {
+  console.log("move:", "isUpper = "+context.data.isUpper + "  isLower = "+context.data.isLower+ " scrolling = "+context.data.scrolling);
+  if (context.data.scrolling){
+    return;
+  }
+  if (context.data.loading) {
     return;
   }
   var movePoint = e.changedTouches[0];
 
   var moveY = (movePoint.clientY - context.data.downY) * 0.5;
+    console.log("moveY = ", moveY);
   if (Math.abs(moveY) > context.data.loadingHeight * 3) {
     return;
   }
@@ -187,6 +205,8 @@ function move(context,e) {
         refreshing_text: '上拉加载更多'
       })
     }
+  }else{
+    console.log("moveY", moveY);   
   }
 }
 module.exports = {
